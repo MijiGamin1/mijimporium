@@ -1,0 +1,32 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2> This is a timer that details the time since the last time I had a mozzarella stick. </h2>
+	<p id="timer"></p>
+	<p id="mozzdate"></p>
+	<h3> What do I classify as a "mozzarella stick"? </h3>
+	<p> I consider a "mozzarella stick" to be any food item that consists of nothing more than cheese surrounded by some kind of bread/breading. <br> The type of cheese and bread do not matter, the cheese must be inside the bread, and that must be the entire snack. </p>
+	
+	<script>
+	setInterval(mozztime, 500);
+	const date = new Date("2025-04-28T12:07:00");
+	function mozztime() {
+		let dhms = [];
+		const currdate = new Date();
+		dhmsConv(dhms, currdate-date);
+		document.getElementById("timer").innerHTML = dhms[0] + " day(s), " + dhms[1] + " hours, " + dhms[2] + " minutes, and " + dhms [3] + " seconds.";
+		document.getElementById("mozzdate").innerHTML = "I last had a mozzarella stick on " + date + " Central Time.";
+	}
+	function dhmsConv(list, time) {
+		list.push(Math.floor((time)/1000/60/60/24));
+		list.push(Math.floor((time)/1000/60/60) % 24);
+		list.push(Math.floor((time)/1000/60) % 60);
+		list.push(Math.floor((time)/1000) % 60);
+	}
+	</script>
+</body>
+</html>
