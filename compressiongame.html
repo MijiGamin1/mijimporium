@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<body>
+<p id="tatext"></p>
+<textarea id="ta" cols="1000"></textarea>
+<br>
+<input type="file" id="f" onchange="fileread(this)" accept=".txt">
+<h2>How does it work?</h2>
+<p>This little "game" is meant to mirror a code.org excercise I did a while ago, something about compression. <br> You type repeated phrases or combinations of words into the text area (each new line is a different phrase), and it "compresses" them into single symbols. <br> Admittedly, I was a bit too lazy to do the symbol thing, so instead I just used the line number followed by a tilde (~). <br> Please note that any number more than single digits, as well as the tildes, are not counted in the final "score". <br> Your "score" is represented by the length of the original file minus the length of the paragraph and text area. </p>
+<p id="score"></p>
+
+<script>
+var muttext;
+var lines;
+var ptext;
+let linelen;
+
+function pUpdate() { //updates text
+	lines = document.getElementById("ta").value.split("\n").filter(line => line.trim() !== "");
+	ptext = muttext;
+    lines.forEach((item, index) => {
+		ptext = ptext.replaceAll(item, index + "~");
+	});
+	document.getElementById("tatext").innerHTML = ptext;
+    
+    linelen = 0; //finds the combined length of all items in the "lines" list
+    lines.forEach((item) => {
+    	linelen = linelen + item.length;
+	});
+    document.getElementById("score").innerHTML = "Score: " + (muttext.length - (linelen + (ptext.length - tildeBGone()))); //score calculation
+}
+    
+setInterval(pUpdate, 100);
+
+function fileread(input) { //opens given file and sets it to the "muttext" variable
+    let file = input.files[0];
+    let reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = function() {
+    const filetext = reader.result;
+    muttext = filetext.replace(/(\r\n|\n|\r)/gm, " ");; //gets rid of all line breaks
+    document.getElementById("tatext").innerHTML = muttext;
+};
+}
+function tildeBGone() { //compresses compression representatives into single symbols when score is calculated
+	let tildes = 0;
+	if (lines.length > 10) {
+    	tildes += (lines.length - 10) * 2;
+        return tildes + 10;
+    }
+    return tildes + lines.length;
+}
+</script>
+</body>
+</html>
+ 
