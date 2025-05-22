@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<body>
+<canvas id="canvas" width="600" height="400" style="border:1px solid black;"></canvas>
+<br><input type="checkbox" id="mode">
+<label for="mode">Line mode?</label>
+<br><p id="test"></p>
+
+
+<script>
+var mousex;
+var mousey;
+let lineset = 0;
+const canvas = document.getElementById("canvas");
+const cont = canvas.getContext("2d");
+
+var xlist = [];
+var ylist = [];
+var line1 = [];
+var line2 = [];
+
+function mousepos(event) {
+	mousex = event.clientX; //sets mouse position to variables
+   	mousey = event.clientY;
+	if (!document.getElementById("mode").checked && mousey < 400) { //if not in line mode & in the box
+    	xlist.push(mousex); //put positions in lists
+    	ylist.push(mousey);
+        cont.strokeStyle = "black";
+    	cont.strokeRect(mousex - 30, mousey - 30, 50, 50); //create box
+    	cont.font = "25px Arial";
+    	cont.fillText(xlist.length, mousex - 12.5, mousey + 5); // put number in box
+	} else if (document.getElementById("mode").checked && mousey < 400) { //line mode
+    	xlist.forEach((item, index) => { //nest haven, jesus
+    	if ((item - 26) < mousex && (item + 26) > mousex) { // if it's actually in a box (ee-rr)
+            if ((ylist[index] - 26) < mousey && (ylist[index] + 26) > mousey) {
+            	lineset++; // # of clicks in line mode. it only matters if it's divisible by 2
+                if (lineset % 2 == 0) {
+                	line2.push(index);
+                    linesort(line1, line2);
+                } else {
+                	line1.push(index);
+               	}
+            }
+        }
+    });
+    }
+}
+
+function linesort(l1, l2) {
+	let safety = 0;
+    
+	var pairs = [];
+    var dunspairce = []; //we have fun around here
+	//make list of every connection, in the format "[smaller number]+[larger number]" (literal "+", not addition"), then check if there are any duplicates in list
+    l1.forEach((item, index) => {
+    	if (pairs.includes(Math.min(item, l2[index]) + "+" + Math.max(item, l2[index])) || item == l2[index]) { //if combination alr exists or click same # twice
+        	l1.pop();
+            l2.pop();
+            lineset = 0;
+   		}
+        pairs.push(Math.min(item, l2[index]) + "+" + Math.max(item, l2[index]));
+        cont.beginPath();
+    	cont.moveTo(xlist[item], ylist[item]);
+        cont.lineTo(xlist[l2[index]], ylist[l2[index]]);
+        cont.strokeStyle = "red";
+        cont.stroke();
+    });
+    l1.forEach((item, index) => {
+    	//add the amount each index appears in "pairs" to a list, safety level (the amount of connections that can be broken) is lowest value-1 (using Math.min) 
+        for (let i = 0; i < (xlist.length - dunspairce.length); i++) { //add needed buffer zeros
+        	dunspairce.push(0);
+        }
+        dunspairce[item] += 1;
+        dunspairce[l2[index]] += 1; //add one connection to each pair
+        if (isNaN(dunspairce[item])) { //set to one if it's NaN
+        	dunspairce[item] = 1;
+        }
+        if (isNaN(dunspairce[l2[index]])) {
+        	dunspairce[l2[index]] = 1;
+        }
+        safety = Math.min(... dunspairce)-1;
+        if (isNaN(safety)) {
+        	safety = 0;
+        }
+        document.getElementById("test").innerHTML = safety + " connection(s) need to be cut before this ceases being fault tolerant.";
+    });
+}
+
+document.addEventListener("click", mousepos);
+</script>
+</body>
+</html>
