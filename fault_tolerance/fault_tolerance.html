@@ -38,9 +38,16 @@ function mousepos(event) {
     	if ((item - 26) < mousex && (item + 26) > mousex) { // if it's actually in a box (ee-rr)
             if ((ylist[index] - 26) < mousey && (ylist[index] + 26) > mousey) {
             	lineset++; // # of clicks in line mode. it only matters if it's divisible by 2
+                cont.globalAlpha = 0.3; // makes lime green box where you click
+                cont.fillStyle = "lime";
+                cont.fillRect(xlist[index] - 30, ylist[index] - 30, 50, 50);
+                cont.globalAlpha = 1;
+                cont.strokeStyle = "black";
                 if (lineset % 2 == 0) {
                 	line2.push(index);
                     linesort(line1, line2);
+                    cont.strokeStyle = "black";
+                    redraw();
                 } else {
                 	line1.push(index);
                	}
@@ -93,6 +100,23 @@ function linesort(l1, l2) {
         }
         document.getElementById("connect").innerHTML = "Box " + (Number(dunspairce.indexOf(Math.min(... dunspairce)))+1) + " only has " + Math.min(... dunspairce) +  " outgoing connections.";
     });
+}
+function redraw() { //redraws entire canvas to remove lime
+	cont.clearRect(0, 0, 600, 400);
+	for (let i = 0; i < xlist.length; i++) {
+    	cont.strokeStyle = "black";
+    	cont.strokeRect(xlist[i] - 30, ylist[i] - 30, 50, 50); //create box
+        cont.fillStyle = "black";
+    	cont.font = "25px Arial";
+    	cont.fillText(i+1, xlist[i] - 12.5, ylist[i] + 5); // put number in box
+    }
+    for (let j = 0; j < line1.length; j++) {
+		cont.beginPath();
+    	cont.moveTo(xlist[line1[j]], ylist[line1[j]]);
+        cont.lineTo(xlist[line2[j]], ylist[line2[j]]);
+        cont.strokeStyle = "red";
+        cont.stroke();
+    }
 }
 
 document.addEventListener("click", mousepos);
