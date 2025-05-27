@@ -46,8 +46,10 @@ function mousepos(event) {
                 if (lineset % 2 == 0) {
                 	line2.push(index);
                     linesort(line1, line2);
-                    cont.strokeStyle = "black";
-                    redraw();
+                    setTimeout(function() {
+                    	cont.strokeStyle = "black";
+                    	redraw();
+                    }, 75);
                 } else {
                 	line1.push(index);
                	}
@@ -101,7 +103,7 @@ function linesort(l1, l2) {
         document.getElementById("connect").innerHTML = "Box " + (Number(dunspairce.indexOf(Math.min(... dunspairce)))+1) + " only has " + Math.min(... dunspairce) +  " outgoing connections.";
     });
 }
-function redraw() { //redraws entire canvas to remove lime
+function redraw() {
 	cont.clearRect(0, 0, 600, 400);
 	for (let i = 0; i < xlist.length; i++) {
     	cont.strokeStyle = "black";
