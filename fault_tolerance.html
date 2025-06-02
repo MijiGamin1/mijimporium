@@ -14,8 +14,6 @@
 <script>
 var mousex;
 var mousey;
-var b1 = new Audio("fault_tolerance/button1.mp3");
-var b2 = new Audio("fault_tolerance/button2.mp3");
 let lineset = 0;
 const canvas = document.getElementById("canvas");
 const cont = canvas.getContext("2d");
@@ -45,11 +43,9 @@ function mousepos(event) {
                 cont.fillRect(xlist[index] - 30, ylist[index] - 30, 50, 50);
                 cont.globalAlpha = 1;
                 cont.strokeStyle = "black";
-		b1.play();
                 if (lineset % 2 == 0) {
                 	line2.push(index);
                     linesort(line1, line2);
-		    b2.play();
                     setTimeout(function() {
                     	cont.strokeStyle = "black";
                     	redraw();
