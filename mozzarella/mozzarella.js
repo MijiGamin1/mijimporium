@@ -1,5 +1,5 @@
 	setInterval(mozztime, 500);
-	const date = new Date("2026-03-23T12:11:00");
+	const date = new Date("2026-04-17T12:08:00");
 	function mozztime() {
 		let dhms = [];
 		const currdate = new Date();
